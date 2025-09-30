@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: myapp
-          image: nginx:alpine
+          image: larryinit/myapp:latest
           imagePullPolicy: Always
           ports:
             - containerPort: 8080
