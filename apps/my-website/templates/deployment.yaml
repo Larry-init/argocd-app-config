@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "my-website.fullname" . }}
+  labels:
+    app: {{ include "my-website.name" . }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app: {{ include "my-website.name" . }}
+  template:
+    metadata:
+      labels:
+        app: {{ include "my-website.name" . }}
+    spec:
+      containers:
+        - name: {{ include "my-website.name" . }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy | default "IfNotPresent" }}
+          ports:
+            - containerPort: {{ .Values.service.port }}

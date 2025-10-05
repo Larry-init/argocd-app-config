@@ -1,0 +1,18 @@
+# Number of pod replicas
+replicaCount: 2
+
+# Container image settings
+image:
+  repository: larryinit/myapp
+  tag: latest
+  pullPolicy: Always
+
+# Service settings
+service:
+  type: NodePort
+  port: 80
+  nodePort: 30080  # optional: choose a fixed port if you want
+
+# Optional name overrides (keep empty unless you want to customize)
+nameOverride: ""
+fullnameOverride: ""
