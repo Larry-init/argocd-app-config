@@ -16,3 +16,14 @@ service:
 # Optional name overrides (keep empty unless you want to customize)
 nameOverride: ""
 fullnameOverride: ""
+
+ingress:
+  enabled: true
+  className: nginx
+  annotations: {}
+  hosts:
+    - host: my-website.local
+      paths:
+        - path: /
+          pathType: Prefix
+  tls: []  # e.g., if you add HTTPS later
