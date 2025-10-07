@@ -8,10 +8,11 @@ metadata:
   annotations:
     {{- toYaml .Values.ingress.annotations | nindent 4 }}
 spec:
-  ingressClassName: {{ .Values.ingress.className }}
+  ingressClassName: nginx
   rules:
+    {{- if .Values.ingress.hosts }}
     {{- range .Values.ingress.hosts }}
-    - host: {{ .host }}
+    - {{- if .host }}host: {{ .host }}{{- end }}
       http:
         paths:
           {{- range .paths }}
@@ -19,13 +20,20 @@ spec:
             pathType: {{ .pathType }}
             backend:
               service:
-                name: {{ include "my-website.fullname" $ }}
+                name: {{ $.Release.Name }}-my-website
                 port:
-                  number: {{ $.Values.service.port }}
+                  number: {{ .servicePort }}
           {{- end }}
     {{- end }}
-  {{- if .Values.ingress.tls }}
-  tls:
-    {{- toYaml .Values.ingress.tls | nindent 4 }}
-  {{- end }}
-{{- end }}
+    {{- else }}
+    - http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: {{ .Release.Name }}-my-website
+                port:
+                  number: 80
+    {{- end }}
+
