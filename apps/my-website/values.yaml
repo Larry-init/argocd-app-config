@@ -22,6 +22,7 @@ ingress:
   className: nginx
   annotations: {}
   hosts:
+    - host: my-website.local
       paths:
         - path: /
           pathType: Prefix
