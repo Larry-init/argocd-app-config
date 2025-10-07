@@ -1,18 +1,11 @@
-{{- if .Values.ingress.enabled }}
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: {{ include "my-website.fullname" . }}
-  labels:
-    {{- include "my-website.labels" . | nindent 4 }}
-  annotations:
-    {{- toYaml .Values.ingress.annotations | nindent 4 }}
 spec:
-  ingressClassName: nginx
   rules:
-    {{- if .Values.ingress.hosts }}
     {{- range .Values.ingress.hosts }}
-    - {{- if .host }}host: {{ .host }}{{- end }}
+    - host: {{ .host }}
       http:
         paths:
           {{- range .paths }}
@@ -20,20 +13,8 @@ spec:
             pathType: {{ .pathType }}
             backend:
               service:
-                name: {{ $.Release.Name }}-my-website
+                name: {{ .service.name }}
                 port:
-                  number: {{ .servicePort }}
+                  number: {{ .service.port }}
           {{- end }}
     {{- end }}
-    {{- else }}
-    - http:
-        paths:
-          - path: /
-            pathType: Prefix
-            backend:
-              service:
-                name: {{ .Release.Name }}-my-website
-                port:
-                  number: 80
-    {{- end }}
-{{- end }}
